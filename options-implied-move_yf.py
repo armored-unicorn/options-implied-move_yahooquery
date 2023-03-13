@@ -49,13 +49,13 @@ def main():
         next_expiration=min(expirations)
         next_expiration_human_friendly=next_expiration.month_name()[0:3]+"{:02d}".format(next_expiration.day)
     
-    # Now that we know the next expiration, select calls and puts from the 
-    # option chain expiring next, making sure options are sorted by strike:
+    # Select calls and puts from the option chain at next_expiration,
+    # making sure that options are sorted by strike.
     
-    # Take only options prices from trades completed within the 30 Minutes 
-    # prior to the most recent option trade received
+    # Only options prices from trades completed within the 30 Minutes 
+    # prior to the most recent option trade will be used in the calculation.
     # Note: implement code to treat value passed through option -f / --filter
-
+    # to be able to customize timedelta.
     next_calls = myticker_options_chain.loc[next_expiration, 'calls'].sort_values(by=['strike'])
     lastTradeDates=next_calls.lastTradeDate
     thirdy_minutes=timedelta(minutes=30)
@@ -131,7 +131,7 @@ def main():
     ax.set_ylabel('Price (USD)', color='b')
     twin1.set_ylabel('IV %', color='b')
 
-    # Vertical line at the underlying prince that spans the yrange.
+    # Vertical line at the underlying price that spans the yrange.
     p5 = ax.axvline(x=regularMarketPrice, linewidth=1.5, color='b', ls='--', label='Underlying Price')
 
     ax.yaxis.label.set_color(p1.get_color())
